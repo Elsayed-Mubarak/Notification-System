@@ -8,7 +8,9 @@
   "private": false,
   "scripts": {
     "start": "yarn serve",
-    "build": "@RD /S /Q D:/Free_Code/notification-system/dist",
+    "dev": "ts-node src/server.ts",
+    "exec": "ts-node src/server.ts",
+    "build": "yarn build-ts",
     "serve": "nodemon dist/bin/server.js",
     "watch": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"yarn watch-ts\" \"yarn watch-serve\"",
     "build-ts": "tsc",
@@ -21,6 +23,7 @@
     "express": "^4.17.1",
     "ioredis": "^4.27.9",
     "joi": "^17.4.2",
+    "joi-objectid": "^4.0.2",
     "mongoose": "^6.0.3",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.12",

@@ -1,5 +1,5 @@
 import http from "http"
-import app from "../app"
+import app from "../server"
 
 var port = process.env.PORT || '7000';
 app.set('port', port);

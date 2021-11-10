@@ -1,4 +1,5 @@
 export enum Status {
-    send = "send",
-    faild = "faild"
+    SENT = "SENT",
+    PENDING = "PENDING",
+    FAILED = "FAILED"
 }

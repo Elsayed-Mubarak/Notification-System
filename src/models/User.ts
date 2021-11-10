@@ -5,7 +5,7 @@ export interface IUser extends Document {
     name: String,
     phone: String,
     email: String,
-    lang: languageEnum
+    lang?: languageEnum
 }
 
 const UserSchema: Schema = new Schema(

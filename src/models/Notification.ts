@@ -1,4 +1,4 @@
-import { model, Schema, Document } from "mongoose";
+import mongoose, { model, Schema, Document } from "mongoose";
 import { notificationTypeEnum } from './enums/NotificationType';
 import { Status } from './enums/NotificationStatus';
 
@@ -10,6 +10,10 @@ export interface INotification extends Document {
 }
 
 const NotificationSchema: Schema = new Schema({
+    notificationId: {
+        type: mongoose.Types.ObjectId,
+        ref: 'User'
+    },
     title: {
         type: String,
         required: true
