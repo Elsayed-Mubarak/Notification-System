@@ -11,8 +11,7 @@ export const userValidation = catchAsync(async (req, res, next) => {
     lang: joi.string().regex(/[a-zA-Z]/)
   }
 
-  const schemaBody = joi.object(requestBody);
-  const { error, value } = schemaBody.validate(req.body);
+  const { error, value } = joi.object(requestBody).validate(req.body);
   console.log('.....User Validation Error......', error)
   if (error)
     return res.status(400).json({ message: error.message.replace(/"/g, '') })

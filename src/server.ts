@@ -20,8 +20,8 @@ import userRouter from './routes/userRouter'
 
 app.use(morgan("tiny"))
 
-app.use('/v1/user', userRouter)
-app.use('/v1', gameRouter)
+app.use('/v1/', userRouter)
+app.use('/v1/', gameRouter)
 
 app.use((err, req, res, next) => {
     console.log("...catch middelware.....", err)

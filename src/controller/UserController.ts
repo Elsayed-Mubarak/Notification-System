@@ -20,6 +20,24 @@ class UserController {
         }
     }
 
+    createGroup = async (req: Request, res: Response) => {
+        try {
+            const createdGroup = await this.userService.createGroup(req.body);
+            return res.status(ResponseCode.CREATED).json({ message: 'Group_CREATED_SUCESSIFULLY', createdGroup });
+        } catch (error) {
+            let { statusCode, status, message } = HandleErrors(error);
+            return res.status(statusCode).json({ status, message });
+        }
+    }
+    addUserToGroup = async (req: Request, res: Response) => {
+        try {
+            let targetUser = await this.userService.addUserToGroup(req.body);
+            return res.status(ResponseCode.CREATED).json({ message: 'USER_Added_To_Group_SUCESSIFULLY', targetUser })
+        } catch (error) {
+            let { statusCode, status, message } = HandleErrors(error);
+            return res.status(statusCode).json({ status, message });
+        }
+    }
 }
 
 export const userController = new UserController();
