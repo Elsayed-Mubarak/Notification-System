@@ -5,7 +5,7 @@ import { catchAsync } from '../utils/catchAsync'
 
 export const UserGroupValidation = catchAsync(async (req, res, next) => {
     const requestBody = {
-        userId: ObjectId().required(),
+        userIds: joi.array().items(ObjectId().required()),
         groupId: ObjectId().required()
     }
     const { error, value } = joi.object(requestBody).validate(req.body);

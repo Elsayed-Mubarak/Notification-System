@@ -31,8 +31,8 @@ class UserController {
     }
     addUserToGroup = async (req: Request, res: Response) => {
         try {
-            let targetUser = await this.userService.addUserToGroup(req.body);
-            return res.status(ResponseCode.CREATED).json({ message: 'USER_Added_To_Group_SUCESSIFULLY', targetUser })
+            let usersGroup = await this.userService.addUserToGroup(req.body);
+            return res.status(ResponseCode.CREATED).json({ message: 'USER_Added_To_Group_SUCESSIFULLY', usersGroup })
         } catch (error) {
             let { statusCode, status, message } = HandleErrors(error);
             return res.status(statusCode).json({ status, message });
