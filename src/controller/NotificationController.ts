@@ -3,6 +3,7 @@ import { Request, Response } from 'express'
 import NotificationService from '../services/NotificationService'
 import HandleErrors from '../utils/handleErrors'
 import { ResponseCode } from '../models/enums/StatusCode'
+import Slack from '../hooks/Slack';
 export class UserController {
 
     private notificationService: NotificationService;
@@ -14,6 +15,9 @@ export class UserController {
     async createNotification(req: Request, res: Response) {
         try {
             const createdNotification = await this.notificationService.createNotification(req.body);
+            let { _id, type } = createdNotification;
+            const notificationService = this.notificationFactory.getNotifierService(type);
+
             return res.status(ResponseCode.CREATED).json({ message: 'Notification_Created_SUCESSIFULLY', createdNotification })
         } catch (error) {
             let { statusCode, status, message } = HandleErrors(error);

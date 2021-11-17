@@ -27,7 +27,7 @@ export default class UserService {
         return createdGroup;
     }
 
-    async addUserToGroup(data: IUserGroup) {
+    async addUsersToGroup(data: IUserGroup) {
         let userIds = Array.isArray(data.userIds) ? data.userIds : "";
         let groupId = mongoose.Types.ObjectId.isValid(data.groupId) ? data.groupId : "";
 

@@ -1,15 +1,18 @@
-import NotificationService from "./NotificationService";
+import ISendNotification from '../models/interfaces/ISendNotification';
 
-export class PushNotificationService extends NotificationService {
-    private message: string;
+export class PushNotificationService implements ISendNotification {
+    constructor() { }
 
-    constructor(message: string = 'hello') {
-        super()
-        this.message = message;
+    send(data: any) {
+        throw new Error('Method not implemented.');
     }
-
-    async send(notification) {
-        console.log(`send data from push notification.... ${notification}`)
-        console.log(this.message)
+    sendOne(data: any) {
+        throw new Error('Method not implemented.');
+    }
+    sendGroup(data: any) {
+        throw new Error('Method not implemented.');
+    }
+    getRateLimterObject(max: any, duration: any) {
+        throw new Error('Method not implemented.');
     }
 }

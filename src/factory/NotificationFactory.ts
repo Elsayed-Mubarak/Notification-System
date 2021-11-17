@@ -5,7 +5,7 @@ import { notificationType } from '../models/enums/NotificationType';
 export class NotificationFactory {
     constructor() { }
 
-    async createNotification(type) {
+    getNotifierService(type) {
         switch (type) {
             case notificationType.SMS:
                 return new PushNotificationService();

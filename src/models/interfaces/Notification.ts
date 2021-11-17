@@ -1,10 +1,9 @@
 import { ObjectId } from 'mongoose';
-import { Status } from './../enums/NotificationStatus';
-
 export interface INotification {
     title: string,
     body: string,
     type: string,
-    status?: Status,
+    userId?: ObjectId | Array<ObjectId>,
+    groupId?: ObjectId,
     to?: ObjectId | Array<ObjectId>
 }

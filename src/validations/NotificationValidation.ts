@@ -2,7 +2,7 @@ const joi = require('joi')
 const joiObjectId = require("joi-objectid")
 const ObjectId = joiObjectId(joi);
 const catchAsync = require('../utils/catchAsync')
-import { notificationTypeEnum } from '../models/enums/NotificationType'
+import { notificationType } from '../models/enums/NotificationType'
 
 const createNotificationValidation = catchAsync(async (req, res, next) => {
   const requestBody = {
@@ -32,9 +32,8 @@ const createNotificationValidation = catchAsync(async (req, res, next) => {
       .string()
       .required()
       .valid([
-        notificationTypeEnum.EMAIL,
-        notificationTypeEnum.SMS,
-        notificationTypeEnum.PUSH_NOTIFICATION,
+        notificationType.SMS,
+        notificationType.PUSH_NOTIFICATION,
       ]),
   }
 

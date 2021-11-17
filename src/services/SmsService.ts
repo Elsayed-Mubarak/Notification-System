@@ -1,11 +1,18 @@
-import NotificationService from "./NotificationService"
+import ISendNotification from "../models/interfaces/ISendNotification"
 
-export class SmsService extends NotificationService {
-    constructor() {
-        super()
+export class SmsService implements ISendNotification {
+    constructor() { }
+    
+    send(data: any) {
+        throw new Error("Method not implemented.");
     }
-
-    async send(notification) {
-        console.log(`send  sms .... ${notification}`)
+    sendOne(data: any) {
+        throw new Error("Method not implemented.");
+    }
+    sendGroup(data: any) {
+        throw new Error("Method implemented To Send From Group.");
+    }
+    getRateLimterObject(max: any, duration: any) {
+        throw new Error("Method implemented To Send Rate Limit.");
     }
 }

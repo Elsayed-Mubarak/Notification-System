@@ -12,7 +12,14 @@ export interface INotification extends Document {
 const NotificationSchema: Schema = new Schema({
     notificationId: {
         type: mongoose.Types.ObjectId,
-        ref: 'User'
+    },
+    userId: {
+        type: mongoose.Types.ObjectId,
+        ref: "User",
+    },
+    groupId: {
+        type: mongoose.Types.ObjectId,
+        ref: "Group",
     },
     title: {
         type: String,
@@ -32,7 +39,7 @@ const NotificationSchema: Schema = new Schema({
         enum: Object.values(Status),
         default: Status.PENDING
     },
-    modificationDate: {
+    creationDate: {
         type: Date,
         defult: new Date()
     }
