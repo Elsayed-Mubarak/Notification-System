@@ -8,9 +8,17 @@ const UserGroupSchema = new Schema({
     notificationId: {
         type: mongoose.Types.ObjectId,
         ref: "Notification",
+    },
+    title: {
+        type: String,
+        required: true
+    },
+    body: {
+        type: String,
+        required: true
     }
 }, {
     timestamps: true
 })
 
-export default model('UserGroup', UserGroupSchema);
+export default model('UserNotification', UserGroupSchema);

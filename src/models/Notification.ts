@@ -21,18 +21,11 @@ const NotificationSchema: Schema = new Schema({
         type: mongoose.Types.ObjectId,
         ref: "Group",
     },
-    title: {
-        type: String,
-        required: true
-    },
-    body: {
-        type: String,
-        required: true
-    },
     type: {
         type: String,
         enum: Object.values(notificationType),
-        default: notificationType.PUSH_NOTIFICATION
+        default: notificationType.PUSH_NOTIFICATION,
+        required: true
     },
     status: {
         type: String,

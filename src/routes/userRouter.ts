@@ -8,6 +8,6 @@ import { userValidation } from "../validations/UserValidation";
 
 router.post('/user/', userValidation, userController.createUser);
 router.post('/group/', groupValidation, userController.createGroup);
-router.post('/user-group/', UserGroupValidation, userController.addUserToGroup);
+router.post('/user-group/', UserGroupValidation, userController.addUsersToGroup);
 
 export default router;

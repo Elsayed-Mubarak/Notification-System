@@ -5,5 +5,5 @@ export interface INotification {
     type: string,
     userId?: ObjectId | Array<ObjectId>,
     groupId?: ObjectId,
-    to?: ObjectId | Array<ObjectId>
+    to: ObjectId | Array<ObjectId>
 }

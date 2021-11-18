@@ -4,23 +4,23 @@ import Notification from "../models/Notification";
 import { ResponseCode } from '../models/enums/StatusCode';
 import User_Notification from '../models/User_Notification';
 import Group from '../models/Group';
+import User_Group from '../models/User_Group';
 
 
 export default class NotificationService {
-    constructor() { }
 
     async createNotification(notification: INotification) {
         let { title, body, type, userId, groupId } = notification;
 
-        let exsistingNotification = await Notification.findOne({ title, body });
+        let exsistingNotification = await User_Notification.findOne({ title, body });
         if (!exsistingNotification)
-            exsistingNotification = await Notification.create({ title, body });
+            exsistingNotification = await User_Notification.create({ title, body });
 
         if (userId) {
             const isUserExsist = await User.findOne({ _id: userId });
-            if (isUserExsist)
+            if (!isUserExsist)
                 throw { statusCode: ResponseCode.NotFoud, status: 'Bad_Request', message: 'User_Not_Exsist' };
-            const userNotification = await Notification.findOne({ _id: exsistingNotification._id, userId, type });
+            const userNotification = await Notification.findOne({ notificationId: exsistingNotification._id, userId, type });
             if (userNotification)
                 throw { statusCode: ResponseCode.AlreadyExist, status: 'Bad_Request', message: 'NOTIFICATION_ALREADY_EXSIST' };
         }
@@ -28,15 +28,47 @@ export default class NotificationService {
             const isUserExsist = await Group.findOne({ _id: groupId });
             if (isUserExsist)
                 throw { statusCode: ResponseCode.NotFoud, status: 'Bad_Request', message: 'Group_Not_Exsist' };
-            const groupNotification = await Notification.findOne({ _id: exsistingNotification._id, groupId, type });
+            const groupNotification = await Notification.findOne({ notificationId: exsistingNotification._id, groupId, type });
             if (groupNotification)
                 throw { statusCode: ResponseCode.AlreadyExist, status: 'Bad_Request', message: 'NOTIFICATION_ALREADY_EXSIST' };
         }
-        const newNotification = await Notification.create({ notificationId: exsistingNotification._id, userId, groupId, type });
+
+        const newNotification = await Notification.create({
+            notificationId: exsistingNotification._id,
+            userId,
+            groupId,
+            type
+        });
         return newNotification;
     }
 
+    async addNotificationToUsers(notificationId) {
+        const exsistingNotification: any = await Notification.findOne({ _id: notificationId });
+        if (!exsistingNotification)
+            throw { statusCode: ResponseCode.NotFoud, status: 'Bad_Request', message: 'Notification_Not_Exsist' };
 
+        if (exsistingNotification.userId) {
+            const userNotification = await User_Notification.create({
+                userId: exsistingNotification.userId,
+                title: exsistingNotification.title,
+                body: exsistingNotification.title
+            });
+        } else
+            if (exsistingNotification.groupId) {
+                let usersIds = [];
+                const usersOnTheSameGroup = await User_Group.find({ groupId: exsistingNotification.groupId });
+                if (usersOnTheSameGroup.length) {
+                    usersOnTheSameGroup.forEach(async item => {
+                        await User_Notification.create({
+                            userId: item.userId,
+                            title: exsistingNotification.title,
+                            body: exsistingNotification.body
+                        })
+                        usersIds.push(item.userId)
+                    });
+                }
+            }
+    }
 
 
 

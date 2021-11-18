@@ -4,7 +4,7 @@ import NotificationService from '../services/NotificationService'
 import HandleErrors from '../utils/handleErrors'
 import { ResponseCode } from '../models/enums/StatusCode'
 import Slack from '../hooks/Slack';
-export class UserController {
+class NotificationController {
 
     private notificationService: NotificationService;
     private notificationFactory: NotificationFactory
@@ -12,19 +12,24 @@ export class UserController {
         this.notificationService = new NotificationService();
         this.notificationFactory = new NotificationFactory();
     }
-    async createNotification(req: Request, res: Response) {
+    createNotification = async (req: Request, res: Response) => {
         try {
             const createdNotification = await this.notificationService.createNotification(req.body);
             let { _id, type } = createdNotification;
             const notificationService = this.notificationFactory.getNotifierService(type);
+            const addedNotification = await this.notificationService.addNotificationToUsers(_id);
+
+
+
 
             return res.status(ResponseCode.CREATED).json({ message: 'Notification_Created_SUCESSIFULLY', createdNotification })
         } catch (error) {
+            console.log("................", error)
             let { statusCode, status, message } = HandleErrors(error);
             return res.status(statusCode).json({ status, message });
         }
     }
-    async sendNotification(req: Request, res: Response) {
+    sendNotification = async (req: Request, res: Response) => {
         try {
             const sentNotification = await this.notificationService.sendNotification(req.body);
             return res.status(ResponseCode.Success).json({ message: 'Notification_Sent_SUCESSIFULLY', sentNotification })
@@ -35,3 +40,5 @@ export class UserController {
     }
 
 }
+
+export const notificationController = new NotificationController();
