@@ -39,14 +39,13 @@ export class KafkaProvider implements BaseProvider {
         }
     }
 
-    async publishMessage(topic: string, message: any): Promise<void> {
+    async publishMessage(key: string, topic: string, message: any): Promise<void> {
         try {
             await this.producer.connect()
             await this.producer.send({
                 topic: topic,
-                messages: [{ value: JSON.stringify({ message }) }]
+                messages: [{ key, value: JSON.stringify({ message }) }]
             })
-
         } catch (err) {
             console.log(err, 'error')
             throw { statusCode: ResponseCode.SomethingWentWrong, status: 'Bad_Request', message: err };
@@ -58,13 +57,26 @@ export class KafkaProvider implements BaseProvider {
             topics.map((topic: string) => this.consumer.subscribe({ topic, fromBeginning: true }))
         )
     }
+
     async readMessagesFromTopics(callback: (data: MessageFromEvent) => void) {
         await this.consumer.run({
             eachMessage: async ({ topic, message }: EachMessagePayload) => {
-                const data = JSON.parse(message.value.toString()) as unknown as Record<string, unknown>
-                callback({ data, provider: this.providerName, topic })
+                console.log(' ..... # Consumer Start received message # ....... ');
+                console.log(' ... .. #### Read Messages From Topics #### .. ... ');
+                try {
+                    // Resive Message From Kafka Topic.
+                    const key = message.key.toString();
+                    const data = JSON.parse(message.value.toString());
+                    callback({ key, data, provider: this.providerName, topic });
+                } catch (e) {
+                    throw {
+                        statusCode: ResponseCode.SomethingWentWrong,
+                        status: 'Bad_Request',
+                        message: 'Unable_To_Handle_Incoming _Message_On_Consumert'
+                    };
+                }
             },
         })
     }
-
+    
 }

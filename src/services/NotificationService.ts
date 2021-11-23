@@ -69,46 +69,11 @@ export default class NotificationService {
                 }
             }
     }
-
-
-
-
-
-
-
-    async sendNotification(notification: INotification) {
-        let { title, body, type, to } = notification;
-        if (!Array.isArray(to)) {
-            const sentNotification = await this.sendNotificationToGroupOfUsers(title, body, type, to);
-        }
-
+    async updateNotificationStatus(id, status) {
+        const updatedNotification = await Notification.findOneAndUpdate({ _id: id, status });
+        if (!updatedNotification)
+            throw { statusCode: ResponseCode.NotModified, status: 'Bad_Request', message: 'NOTIFICATION_NOT_MODIFIED' };
+        return updatedNotification;
     }
 
-
-
-
-    async sendNotificationToGroupOfUsers(title, body, type, to) {
-        let targetUsers = [];
-        const users = await User.find({ _id: { $in: to } })
-        users.forEach(item => { targetUsers.push(item) })
-
-    }
-    async sendNotificationToCustomUser(title, body, type, to) {
-        let targetUsers = [];
-        const users = await User.find({ _id: { $in: to } })
-        users.forEach(item => { targetUsers.push(item) })
-
-    }
-    async sendBulkNotificationToGroupUser(title, body, type, to) {
-        let targetUsers = [];
-        const users = await User.find({ _id: { $in: to } })
-        users.forEach(item => { targetUsers.push(item) })
-
-    }
-    async sendBulkNotificationToCustomUser(title, body, type, to) {
-        let targetUsers = [];
-        const users = await User.find({ _id: { $in: to } })
-        users.forEach(item => { targetUsers.push(item) })
-
-    }
 }
