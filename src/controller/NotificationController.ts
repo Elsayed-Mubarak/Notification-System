@@ -28,23 +28,22 @@ class NotificationController {
             let { _id, type } = createdNotification;
             const notificationService = this.notificationFactory.getNotifierService(type);
             const addedNotification = await this.notificationService.addNotificationToUsers(_id);
-
+            //send message
+            let sentNotification: any = notificationService.send(createdNotification);
             // send message to kafka broker on topic ${type}
             await this.kafkaProvider.publishMessage(_id, type.toString(), createdNotification);
-            let sentNotification: any = notificationService.send(createdNotification);
 
             //   this.event.on("sendNotification", dispatcher);
             const sendMessageFromEvent = (message: MessageFromEvent) => {
-                if (message.key.toString() === _id.toString() && message.topic === type) {
+                if (message._id.toString() === _id.toString() && message.topic === type) {
                     //  this.event.emit("Kafka_Test", message);
                     console.log(`
-                    ... ### Concumer_Subscribed_On_Notification_ID : ${message.key} 
+                    ... ### Concumer_Subscribed_On_Notification_ID : ${message._id} 
                     Notification_From_Topic : ${message.topic} With Message ${message.data} .... ###
                     `);
                     console.log(` .... #################################################### ....  `);
                 }
             }
-
             let topics: string[] = convertToTopicType(type);
             await this.kafkaProvider.subscribe(topics);
             await this.kafkaProvider.readMessagesFromTopics(sendMessageFromEvent)

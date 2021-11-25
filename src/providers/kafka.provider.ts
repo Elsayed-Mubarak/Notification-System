@@ -11,45 +11,29 @@ export class KafkaProvider implements BaseProvider {
     private admin: Admin;
 
     constructor(opt: KafkaConnectionOptions) {
-        this.provider = new Kafka({
-            clientId: opt.clientId,
-            brokers: opt.brokers
-        });
 
-        this.admin = this.provider.admin();
-        this.producer = this.provider.producer();
+        this.provider = new Kafka({ clientId: opt.clientId, brokers: opt.brokers });
         this.consumer = this.provider.consumer({ groupId: opt.groupId });
-        this.createTopic().then()
-    }
+        this.producer = this.provider.producer();
+        this.admin = this.provider.admin();
 
+        this.createTopic().then();
+    }
     async createTopic() {
-        try {
-            await this.admin.connect()
-            await this.admin.createTopics({
-                waitForLeaders: true,
-                topics: [
-                    { topic: 'SMS' },
-                    { topic: 'PUSH_NOTIFICATION' }
-                ]
-            })
-        } catch (err) {
-            console.log("ERROR_FROM_KAFKA_CREATE_TOPIC", err);
-            throw { statusCode: ResponseCode.SomethingWentWrong, status: 'Bad_Request', message: err };
-
+        await this.admin.connect();
+        let isCreated = await this.admin.createTopics({ waitForLeaders: true, topics: [{ topic: 'SMS' }, { topic: 'PUSH_NOTIFICATION' }] });
+        if (isCreated === false) {
+            throw { statusCode: ResponseCode.SomethingWentWrong, status: 'Bad_Request', message: 'Topic_Not_Created' };
         }
+        return
     }
-
-    async publishMessage(key: string, topic: string, message: any): Promise<void> {
-        try {
-            await this.producer.connect()
-            await this.producer.send({
-                topic: topic,
-                messages: [{ key, value: JSON.stringify({ message }) }]
-            })
-        } catch (err) {
-            console.log(err, 'error')
-            throw { statusCode: ResponseCode.SomethingWentWrong, status: 'Bad_Request', message: err };
+    async publishMessage(_id: string, topic: string, message: any): Promise<void> {
+        await this.producer.connect()
+        let publishedData = await this.producer.send({ topic: topic, messages: [{ key:_id, value: JSON.stringify({ message }) }] })
+        if (!publishedData) {
+            throw { statusCode: ResponseCode.SomethingWentWrong, status: 'Bad_Request', message: 'Producer_Not_Published_Data' };
         }
+        return
     }
 
     async subscribe(topics: string[]): Promise<void> {
@@ -57,26 +41,16 @@ export class KafkaProvider implements BaseProvider {
             topics.map((topic: string) => this.consumer.subscribe({ topic, fromBeginning: true }))
         )
     }
-
+    
     async readMessagesFromTopics(callback: (data: MessageFromEvent) => void) {
         await this.consumer.run({
             eachMessage: async ({ topic, message }: EachMessagePayload) => {
-                console.log(' ..... # Consumer Start received message # ....... ');
                 console.log(' ... .. #### Read Messages From Topics #### .. ... ');
-                try {
-                    // Resive Message From Kafka Topic.
-                    const key = message.key.toString();
-                    const data = JSON.parse(message.value.toString());
-                    callback({ key, data, provider: this.providerName, topic });
-                } catch (e) {
-                    throw {
-                        statusCode: ResponseCode.SomethingWentWrong,
-                        status: 'Bad_Request',
-                        message: 'Unable_To_Handle_Incoming _Message_On_Consumert'
-                    };
-                }
+                const _id = message.key.toString();
+                const data = JSON.parse(message.value.toString());
+                callback({ _id, data, provider: this.providerName, topic });
             },
         })
     }
-    
+
 }

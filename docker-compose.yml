@@ -1,12 +1,14 @@
-version: "3"
+version: '3.7'
+
 networks:
-  kafka-redis-mongo:
+  kafka-net:
     driver: bridge
+
 services:
   zookeeper-server:
     image: 'bitnami/zookeeper:latest'
     networks:
-      - kafka-redis-mongo
+      - kafka-net
     ports:
       - '2181:2181'
     environment:
@@ -14,7 +16,7 @@ services:
   kafka-server1:
     image: 'bitnami/kafka:latest'
     networks:
-      - kafka-redis-mongo
+      - kafka-net
     ports:
       - '9092:9092'
     environment:
@@ -23,31 +25,3 @@ services:
       - ALLOW_PLAINTEXT_LISTENER=yes
     depends_on:
       - zookeeper-server
-  app:
-    container_name: app
-    build: .
-    environment:
-      - MONGO_URL=mongo
-      - REDIS_URL=redis
-    ports:
-      - "3009:3009"
-    volumes:
-      - .:/usr/app
-    links:
-      - mongo
-      - redis
-  mongo:
-    container_name: mongoDB
-    image: mongo
-    command: mongod --quiet --logpath /dev/null 
-    volumes:
-      - ./data:/data/db
-    ports:
-      - "27018:27017"
-  redis:
-    container_name: redis
-    image: redis
-    volumes:
-      - ./data:/redis/db
-    ports:
-      - "6378:6379"

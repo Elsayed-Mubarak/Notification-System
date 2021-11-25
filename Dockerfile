@@ -1,15 +1,14 @@
-FROM node:carbon
+FROM node:14-stretch
 
-WORKDIR /app
+ENV workdir /var/prod
 
-COPY package*.json ./
+WORKDIR ${workdir}
 
-RUN npm install && npm install typescript -g
+COPY *.json .
+COPY src ./src
 
-COPY ./ ./
+RUN npm install
+RUN npm run build
 
-RUN tsc
-
-EXPOSE 3009
-
-CMD ["npm","start"]
+EXPOSE 7000
+CMD ["npm", "run", "start"]

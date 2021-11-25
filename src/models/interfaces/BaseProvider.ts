@@ -5,7 +5,7 @@ export interface BaseProvider {
 }
 
 export interface MessageFromEvent {
-    key: string
+    _id: string
     data: string
     topic: string
     provider: string
