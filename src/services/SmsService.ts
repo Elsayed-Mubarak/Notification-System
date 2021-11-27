@@ -1,7 +1,7 @@
 import { ResponseCode } from "../models/enums/StatusCode"
 import ISendNotification from "../models/interfaces/ISendNotification"
 
-export class SmsService implements ISendNotification {
+export default class SmsService implements ISendNotification {
     constructor() { }
 
     async send(data: any) {
@@ -11,16 +11,12 @@ export class SmsService implements ISendNotification {
             this.sendGroup(data)
     }
     async sendOne(data: any) {
-        console.log(`sendOne ... ${data}`)
-        return data
+        console.log(`sendOne ${data.notificationType}`)
     }
     async sendGroup(data: any) {
-        console.log(`sendGroup ... ${data}`)
-        return data
+        console.log(`sendGroup ${data.notificationType}`)
     }
     async getRateLimterObject(max: any, duration: any) {
         console.log(`getRateLimterObject ...`);
-        const data = { max, duration }
-        return data;
     }
 }

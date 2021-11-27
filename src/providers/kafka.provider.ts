@@ -1,4 +1,4 @@
-import { Admin, Consumer, EachMessagePayload, Kafka, Producer } from 'kafkajs'
+import { Admin, Consumer, EachMessagePayload, ITopicConfig, Kafka, Producer } from 'kafkajs'
 import { ResponseCode } from '../models/enums/StatusCode';
 import { KafkaConnectionOptions, BaseProvider, MessageFromEvent } from '../models/interfaces/BaseProvider'
 
@@ -20,8 +20,16 @@ export class KafkaProvider implements BaseProvider {
         this.createTopic().then();
     }
     async createTopic() {
+        let inputTopics: any = [{ topic: 'SMS' }, { topic: 'PUSH_NOTIFICATION' }];
+        const inputTopicsArry: string[] = inputTopics.map(item => item.topic)
+
         await this.admin.connect();
-        let isCreated = await this.admin.createTopics({ waitForLeaders: true, topics: [{ topic: 'SMS' }, { topic: 'PUSH_NOTIFICATION' }] });
+        let exsistingToics: string[] = await this.admin.listTopics();
+        const isEqual = this.equals(inputTopicsArry, exsistingToics)
+        if (exsistingToics && isEqual) {
+            return
+        }
+        let isCreated = await this.admin.createTopics({ waitForLeaders: true, topics: inputTopics });
         if (isCreated === false) {
             throw { statusCode: ResponseCode.SomethingWentWrong, status: 'Bad_Request', message: 'Topic_Not_Created' };
         }
@@ -29,7 +37,7 @@ export class KafkaProvider implements BaseProvider {
     }
     async publishMessage(_id: string, topic: string, message: any): Promise<void> {
         await this.producer.connect()
-        let publishedData = await this.producer.send({ topic: topic, messages: [{ key:_id, value: JSON.stringify({ message }) }] })
+        let publishedData = await this.producer.send({ topic: topic, messages: [{ key: _id, value: JSON.stringify({ message }) }] })
         if (!publishedData) {
             throw { statusCode: ResponseCode.SomethingWentWrong, status: 'Bad_Request', message: 'Producer_Not_Published_Data' };
         }
@@ -41,7 +49,7 @@ export class KafkaProvider implements BaseProvider {
             topics.map((topic: string) => this.consumer.subscribe({ topic, fromBeginning: true }))
         )
     }
-    
+
     async readMessagesFromTopics(callback: (data: MessageFromEvent) => void) {
         await this.consumer.run({
             eachMessage: async ({ topic, message }: EachMessagePayload) => {
@@ -52,5 +60,5 @@ export class KafkaProvider implements BaseProvider {
             },
         })
     }
-
+    equals = (a: string[], b: string[]) => JSON.stringify(a) === JSON.stringify(b);
 }

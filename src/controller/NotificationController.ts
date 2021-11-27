@@ -1,5 +1,5 @@
 import { KafkaProvider } from './../providers/kafka.provider';
-import { NotificationFactory } from './../factory/NotificationFactory';
+import NotificationFactory from './../factory/NotificationFactory';
 import { Request, Response } from 'express'
 import NotificationService from '../services/NotificationService'
 import HandleErrors from '../utils/handleErrors'

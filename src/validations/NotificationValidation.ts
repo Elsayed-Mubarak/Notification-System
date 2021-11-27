@@ -7,7 +7,7 @@ import { notificationType } from '../models/enums/NotificationType'
 export const createNotificationValidation = catchAsync(async (req, res, next) => {
   const requestBody = {
     title: joi.string().required(),
-    body: joi.string().required().required(),
+    body: joi.string().required(),
     userId: ObjectId().allow(''),
     groupId: joi.when('userId', {
       is: '',

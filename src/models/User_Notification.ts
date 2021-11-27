@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document, model } from 'mongoose';
 
-const UserGroupSchema = new Schema({
+const UserGroupSchema: Schema = new Schema({
     userId: {
         type: mongoose.Types.ObjectId,
         ref: "User",

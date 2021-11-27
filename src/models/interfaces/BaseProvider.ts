@@ -16,3 +16,8 @@ export interface KafkaConnectionOptions {
     brokers: string[]
     groupId: string
 }
+export interface Topics {
+    clientId: string
+    brokers: string[]
+    groupId: string
+}
