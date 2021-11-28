@@ -1,17 +1,15 @@
 import { IncomingWebhook } from '@slack/webhook';
 import Constants from '../models/Constants';
 
-class Slack {
+export class Slack {
     private webhook;
-    constructor() {
-        this.webhook = new IncomingWebhook(Constants.SLACK_WEBHOOK_URL);
+    constructor(SLACK_WEBHOOK_URL: string) {
+        this.webhook = new IncomingWebhook(SLACK_WEBHOOK_URL);
     }
 
     async getHook(message: string) {
         await this.webhook.send({
-            text: ` This Message From Sayed Mubarak ${message}`,
+            text: `Kafka Consumer Subscribe On Message Made By Sayed Mubarak With This Content :: ${message}`,
         });
     }
 }
-
-export default new Slack();

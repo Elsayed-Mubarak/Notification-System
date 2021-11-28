@@ -4,7 +4,7 @@ import { Request, Response } from 'express'
 import NotificationService from '../services/NotificationService'
 import HandleErrors from '../utils/handleErrors'
 import { ResponseCode } from '../models/enums/StatusCode'
-import Slack from '../hooks/Slack';
+import { Slack } from '../hooks/Slack';
 import Constants from '../models/Constants';
 import { MessageFromEvent } from '../models/interfaces/BaseProvider'
 import * as events from 'events'
@@ -14,12 +14,14 @@ class NotificationController {
 
     private notificationService: NotificationService;
     private notificationFactory: NotificationFactory;
-    private kafkaProvider: KafkaProvider
+    private kafkaProvider: KafkaProvider;
+    private slack: Slack;
     //private event: events
     constructor() {
         this.notificationService = new NotificationService();
         this.notificationFactory = new NotificationFactory();
         this.kafkaProvider = new KafkaProvider(Constants.KAFKA_OPTS);
+        this.slack = new Slack(Constants.SLACK_WEBHOOK_URL);
         //  this.event = new events.EventEmitter();
     }
     createNotification = async (req: Request, res: Response) => {
@@ -31,7 +33,9 @@ class NotificationController {
             //send message
             let sentNotification: any = notificationService.send(createdNotification);
             // send message to kafka broker on topic ${type}
-            await this.kafkaProvider.publishMessage(_id, type.toString(), createdNotification);
+            const notificationId = _id.toString();
+            const notificationType = type.toString();
+            await this.kafkaProvider.publishMessage(notificationId, notificationType, createdNotification);
 
             //   this.event.on("sendNotification", dispatcher);
             const sendMessageFromEvent = (message: MessageFromEvent) => {
@@ -48,11 +52,14 @@ class NotificationController {
             await this.kafkaProvider.subscribe(topics);
             await this.kafkaProvider.readMessagesFromTopics(sendMessageFromEvent)
             if (sentNotification) {
-                await this.notificationService.updateNotificationStatus(_id, Status.SENT);
+                const [sentNotification] = await Promise.all([this.notificationService.updateNotificationStatus(_id, Status.SENT)])
+                if (sentNotification) {
+                    await this.slack.getHook(JSON.stringify(sentNotification));
+                }
             }
             return res.status(ResponseCode.CREATED).json({ message: 'NOTIFICATION_CREATED_SUCESSIFULLY', createdNotification })
         } catch (error) {
-            console.log("................", error)
+            console.log("............error notification controller.............", error)
             let { statusCode, status, message } = HandleErrors(error);
             return res.status(statusCode).json({ status, message });
         }

@@ -3,16 +3,19 @@ import ISendNotification from '../models/interfaces/ISendNotification';
 export class PushNotificationService implements ISendNotification {
     constructor() { }
 
-    send(data: any) {
-        throw new Error('Method not implemented.');
+    async send(data: any) {
+        if (data.userId)
+            this.sendOne(data)
+        else
+            this.sendGroup(data)
     }
-    sendOne(data: any) {
-        throw new Error('Method not implemented.');
+    async sendOne(data: any) {
+        console.log(`sendOne ... ${data.type}`)
     }
-    sendGroup(data: any) {
-        throw new Error('Method not implemented.');
+    async sendGroup(data: any) {
+        console.log(`sendGroup ... ${data.type}`)
     }
-    getRateLimterObject(max: any, duration: any) {
-        throw new Error('Method not implemented.');
+    async getRateLimterObject(max: any, duration: any) {
+        console.log(`getRateLimterObject ...`);
     }
 }

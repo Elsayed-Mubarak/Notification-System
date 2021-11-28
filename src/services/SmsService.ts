@@ -11,10 +11,10 @@ export default class SmsService implements ISendNotification {
             this.sendGroup(data)
     }
     async sendOne(data: any) {
-        console.log(`sendOne ${data.notificationType}`)
+        console.log(`sendOne ... ${data.type}`)
     }
     async sendGroup(data: any) {
-        console.log(`sendGroup ${data.notificationType}`)
+        console.log(`sendGroup ... ${data.type}`)
     }
     async getRateLimterObject(max: any, duration: any) {
         console.log(`getRateLimterObject ...`);

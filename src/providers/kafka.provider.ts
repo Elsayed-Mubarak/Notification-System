@@ -25,7 +25,7 @@ export class KafkaProvider implements BaseProvider {
 
         await this.admin.connect();
         let exsistingToics: string[] = await this.admin.listTopics();
-        const isEqual = this.equals(inputTopicsArry, exsistingToics)
+        const isEqual = this.contains(exsistingToics, inputTopicsArry)
         if (exsistingToics && isEqual) {
             return
         }
@@ -35,9 +35,9 @@ export class KafkaProvider implements BaseProvider {
         }
         return
     }
-    async publishMessage(_id: string, topic: string, message: any): Promise<void> {
+    async publishMessage(notificationId: string, notificationType: string, message: any): Promise<void> {
         await this.producer.connect()
-        let publishedData = await this.producer.send({ topic: topic, messages: [{ key: _id, value: JSON.stringify({ message }) }] })
+        let publishedData = await this.producer.send({ topic: notificationType, messages: [{ key: notificationId, value: JSON.stringify({ message }) }] })
         if (!publishedData) {
             throw { statusCode: ResponseCode.SomethingWentWrong, status: 'Bad_Request', message: 'Producer_Not_Published_Data' };
         }
@@ -60,5 +60,12 @@ export class KafkaProvider implements BaseProvider {
             },
         })
     }
-    equals = (a: string[], b: string[]) => JSON.stringify(a) === JSON.stringify(b);
+    contains(a, b) {
+        let counter = 0
+        for (var i = 0; i < b.length; i++) {
+            if (a.includes(b[i])) counter++
+        }
+        if (counter === b.length) return true
+        return false
+    }
 }
