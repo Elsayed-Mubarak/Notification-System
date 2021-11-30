@@ -6,5 +6,5 @@ export const dispatcher = (message: MessageFromEvent) => {
 }
 
 export const convertToTopicType = (type: String): string[] => {
-    return type.split("");
+    return type.split(" ");
 }

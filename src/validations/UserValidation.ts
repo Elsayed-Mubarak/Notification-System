@@ -1,6 +1,4 @@
 const joi = require('joi')
-const joiObjectId = require("joi-objectid")
-const ObjectId = joiObjectId(joi);
 import { catchAsync } from '../utils/catchAsync'
 export const userValidation = catchAsync(async (req, res, next) => {
 

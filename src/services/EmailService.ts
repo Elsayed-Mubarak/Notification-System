@@ -1,6 +1,6 @@
 import ISendNotification from "../models/interfaces/ISendNotification"
 
-export default class SmsService implements ISendNotification {
+export default class EmailService implements ISendNotification {
     constructor() { }
 
     async send(data: any) {

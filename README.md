@@ -2,15 +2,15 @@
 Notification system for sending Notifications (SMS/Email/Push Notification) to specifec user or group of users.
 
 technologies:
-  - node js
-  - express
-  - mongodb
-  - redis
-  - kafka
-  - jest
-  - docker
-  - docker-compose
-  - slack APIs
+  - Node js
+  - Express
+  - Mongodb
+  - rRdis
+  - Kafka
+  - Jest
+  - Docker
+  - Docker-compose
+  - Slack APIs
 
 to start this project :
   - approach 1:

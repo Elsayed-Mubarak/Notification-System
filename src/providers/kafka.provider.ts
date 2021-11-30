@@ -45,9 +45,7 @@ export class KafkaProvider implements BaseProvider {
     }
 
     async subscribe(topics: string[]): Promise<void> {
-        await Promise.all(
-            topics.map((topic: string) => this.consumer.subscribe({ topic, fromBeginning: true }))
-        )
+        await Promise.all(topics.map((topic: string) => { this.consumer.subscribe({ topic, fromBeginning: true }) }))
     }
 
     async readMessagesFromTopics(callback: (data: MessageFromEvent) => void) {
@@ -60,12 +58,13 @@ export class KafkaProvider implements BaseProvider {
             },
         })
     }
-    contains(a, b) {
+
+    contains(exsistingToics, inputTopicsArry) {
         let counter = 0
-        for (var i = 0; i < b.length; i++) {
-            if (a.includes(b[i])) counter++
+        for (var i = 0; i < inputTopicsArry.length; i++) {
+            if (exsistingToics.includes(inputTopicsArry[i])) counter++
         }
-        if (counter === b.length) return true
+        if (counter === inputTopicsArry.length) return true
         return false
     }
 }

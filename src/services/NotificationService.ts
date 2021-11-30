@@ -6,7 +6,6 @@ import User_Notification from '../models/User_Notification';
 import Group from '../models/Group';
 import User_Group from '../models/User_Group';
 
-
 export default class NotificationService {
 
     async createNotification(notification: INotification) {
@@ -52,7 +51,7 @@ export default class NotificationService {
             throw { statusCode: ResponseCode.NotFoud, status: 'Bad_Request', message: 'Notification_Not_Exsist' };
 
         if (exsistingNotification.userId) {
-            const userNotification = await User_Notification.create({
+            await User_Notification.create({
                 userId: exsistingNotification.userId,
                 title: exsistingNotification.title,
                 body: exsistingNotification.title
@@ -72,14 +71,5 @@ export default class NotificationService {
                     });
                 }
             }
-        console.log("addNotificationToUsers ...........");
-
     }
-    async updateNotificationStatus(id, status) {
-        const updatedNotification = await Notification.findOneAndUpdate({ _id: id, status });
-        if (!updatedNotification)
-            throw { statusCode: ResponseCode.NotModified, status: 'Bad_Request', message: 'NOTIFICATION_NOT_MODIFIED' };
-        return updatedNotification;
-    }
-
 }
