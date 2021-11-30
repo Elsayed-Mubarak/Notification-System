@@ -73,5 +73,14 @@ export default class NotificationService {
                 }
             }
     }
- 
+
+
+    async listAllNotification() {
+
+        const exsistingNotifications: any = await Notification.find();
+        if (!exsistingNotifications)
+            throw { statusCode: ResponseCode.NotFoud, status: 'Bad_Request', message: 'NOT_FOUND_NOTIFICATION' };
+        return exsistingNotifications;
+    }
+
 }

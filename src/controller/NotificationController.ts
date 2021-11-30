@@ -53,9 +53,7 @@ class NotificationController {
                     `);
                 }
             }
-
             await Promise.all([this.kafkaProvider.subscribe(topics), this.kafkaProvider.readMessagesFromTopics(sendMessageFromEvent)])
-
             return res.status(ResponseCode.CREATED).json({ message: 'NOTIFICATION_CREATED_SUCESSIFULLY', createdNotification })
         } catch (error) {
             let { statusCode, status, message } = HandleErrors(error);
@@ -63,9 +61,10 @@ class NotificationController {
         }
     }
 
-    sendNotification = async (req: Request, res: Response) => {
+    getAllNotifications = async (req: Request, res: Response) => {
         try {
-            return res.status(ResponseCode.Success).json({ message: 'Notification_Sent_SUCESSIFULLY' })
+            const notifications = await this.notificationService.listAllNotification();
+            return res.status(ResponseCode.Success).json({ message: 'SUCESS', ALL_NOTIFICATIONS: notifications })
         } catch (error) {
             let { statusCode, status, message } = HandleErrors(error);
             return res.status(statusCode).json({ status, message });

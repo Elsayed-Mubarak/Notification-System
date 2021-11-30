@@ -4,5 +4,6 @@ import { createNotificationValidation } from "../validations/NotificationValidat
 import { notificationController } from "../controller/NotificationController";
 
 router.post('/notification', createNotificationValidation, notificationController.createNotification)
+router.get('/notification', notificationController.getAllNotifications)
 
 export default router
