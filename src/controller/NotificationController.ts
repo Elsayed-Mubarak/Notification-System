@@ -7,8 +7,7 @@ import { ResponseCode } from '../models/enums/StatusCode'
 import { Slack } from '../hooks/Slack';
 import Constants from '../models/Constants';
 import { MessageFromEvent } from '../models/interfaces/BaseProvider'
-//import * as events from 'events'
-import { dispatcher, convertToTopicType } from '../models/interfaces/dispatcher'
+import { convertToTopicType } from '../models/interfaces/dispatcher'
 import { Status } from "../models/enums/NotificationStatus";
 class NotificationController {
 
@@ -34,32 +33,29 @@ class NotificationController {
 
             //Send message with target provider
             let sentNotification: any = notificationService.send(createdNotification);
+
             //Send message to kafka broker on topic ${type}
             const notificationId = _id.toString();
             const notificationType = type.toString();
+            const topics: string[] = convertToTopicType(type);
             await this.kafkaProvider.publishMessage(notificationId, notificationType, createdNotification);
-            //   this.event.on("sendNotification", dispatcher);
+            const sendMessageFromEvent = async (message: MessageFromEvent) => {
+                if (message._id.toString() === notificationId && message.topic === notificationType) {
 
+                    createdNotification.status = Status.SENT;
+                    await Promise.all([createdNotification.save(), this.slack.sendHook(JSON.stringify(createdNotification))])
 
-            const sendMessageFromEvent = (message: MessageFromEvent) => {
-                if (message._id.toString() === _id.toString() && message.topic === type) {
-                    //  this.event.emit("Kafka_Test", message);
                     console.log(`
-                    ... ### Concumer_Subscribed_On_Notification_ID : {${message._id}} 
-                    Notification_From_Topic : ${message.topic} :: With Message ${message.data} .... ###
-                    *************************************************************************************
+                    ### **** Concumer_Subscribed_On_Notification_ID : {${message._id}} **** ###
+                    ### **** Read_Notification_From_Topic : {${message.topic}} **** ###
+                    ### **** With Message {${JSON.stringify(message.data)}} ***** ###
+                    ****************************************************************************
                     `);
-                    console.log(` ....  ....  `);
                 }
             }
 
-            let topics: string[] = convertToTopicType(type);
             await Promise.all([this.kafkaProvider.subscribe(topics), this.kafkaProvider.readMessagesFromTopics(sendMessageFromEvent)])
 
-            if (sentNotification) {
-                createdNotification.status = Status.SENT;
-                await Promise.all([createdNotification.save(), this.slack.sendHook(JSON.stringify(sentNotification))])
-            }
             return res.status(ResponseCode.CREATED).json({ message: 'NOTIFICATION_CREATED_SUCESSIFULLY', createdNotification })
         } catch (error) {
             let { statusCode, status, message } = HandleErrors(error);

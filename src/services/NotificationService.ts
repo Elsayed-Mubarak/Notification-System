@@ -5,6 +5,7 @@ import { ResponseCode } from '../models/enums/StatusCode';
 import User_Notification from '../models/User_Notification';
 import Group from '../models/Group';
 import User_Group from '../models/User_Group';
+import { MessageFromEvent } from '../models/interfaces/BaseProvider'
 
 export default class NotificationService {
 
@@ -72,4 +73,5 @@ export default class NotificationService {
                 }
             }
     }
+ 
 }
