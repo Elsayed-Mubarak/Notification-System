@@ -15,7 +15,7 @@ technologies:
 
 Solid Prenciple:
   - Open-Closed Prenciple
-  - Dependency Inversion
+  - Dependency Inversion Prenciple
 
 Design Pattern:
 - Factory Design Pattern
@@ -56,5 +56,5 @@ Steps to Send a notification:
     - POST: create group: http://localhost:7000/group
     - POST: add users to group: http://localhost:7000/user-group
     - POST: create notification: http://localhost:7000/notification
-    - GET: create notification: http://localhost:7000/notification
+    - GET: get all notification: http://localhost:7000/notification
 
