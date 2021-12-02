@@ -1,0 +1,58 @@
+{
+  "name": "notification-system",
+  "version": "1.0.0",
+  "description": "notification system",
+  "main": "server.ts",
+  "author": "Elsayed-Mubarak <elsayed.mubarak@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "jest": {
+    "transform": {
+      ".(ts|tsx)": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ]
+  },
+  "scripts": {
+    "start": "yarn serve",
+    "dev": "ts-node src/server.ts",
+    "exec": "ts-node src/server.ts",
+    "build": "yarn build-ts",
+    "serve": "nodemon dist/bin/server.js",
+    "watch": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"yarn watch-ts\" \"yarn watch-serve\"",
+    "build-ts": "tsc",
+    "test": "jest --testEnvironment=node --verbose --detectOpenHandles --forceExit ./tests"
+  },
+  "dependencies": {
+    "@slack/webhook": "^6.0.0",
+    "@types/jest": "^27.0.3",
+    "body-parser": "^1.19.0",
+    "colors": "^1.4.0",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "https-proxy-agent": "^5.0.0",
+    "ioredis": "^4.27.9",
+    "ip": "^1.1.5",
+    "joi": "^17.4.2",
+    "joi-objectid": "^4.0.2",
+    "kafkajs": "^1.15.0",
+    "mongoose": "^6.0.3",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.12",
+    "swagger-ui-express": "^4.1.6",
+    "ts-node": "^10.2.1",
+    "typescript": "^4.4.2"
+  },
+  "devDependencies": {
+    "@types/mongoose": "^5.11.97",
+    "@types/supertest": "^2.0.11",
+    "jest": "^27.4.3",
+    "supertest": "^6.1.6",
+    "ts-jest": "^27.0.7"
+  }
+}

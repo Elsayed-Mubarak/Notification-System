@@ -1,0 +1,20 @@
+export const enum ResponseCode {
+    Success = 200,
+    EmptyList = 201,
+    Empty = 204,
+    NotModified = 304,
+    ValidationError = 400,
+    NotFoud = 404,
+    AlreadyExist = 409,
+    Unauthorized = 401,
+    Forbidden = 403,
+    UnprocessableEntities = 422,
+    StudentNotRegistered = 201,
+    TransferLimitExceed = 410,
+    WrongSinchKey = 406,
+    TeachReview = 411,
+    FreezedAccount = 417,
+    SomethingWentWrong = 500,
+    CREATED = 201,
+
+}
