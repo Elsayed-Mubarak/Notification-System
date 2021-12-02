@@ -25,7 +25,6 @@ To Start This Project :
     - prerequisites:
       - install node     https://nodejs.org/en/download/
       - install mongo    https://docs.mongodb.com/manual/administration/install-community/
-      - install redis    https://redis.io/download
       
     - to run this project:
       - clone this repo
@@ -44,8 +43,8 @@ To Start This Project :
       - run docker-compose build
       - run docker-compose up
       
-      - now zookeeper-server should be running on port 2181
-      - now kafka-server1 should be running on port 9092
+      - make sure zookeeper-server should be running on port 2181
+      - make sure kafka-server1 should be running on port 9092
 
 Steps to Send a notification:
   - for specific user:
