@@ -49,12 +49,12 @@ To Start This Project :
 Steps to Send a notification:
   - for specific user:
     - POST: create user: http://localhost:7000/v1/user
-    - POST: create notification: http://localhost:7000/notification
+    - POST: create notification: http://localhost:7000/v1/notification
   
   - for group of users:
-    - POST: create user: http://localhost:7000/user
-    - POST: create group: http://localhost:7000/group
-    - POST: add users to group: http://localhost:7000/user-group
-    - POST: create notification: http://localhost:7000/notification
-    - GET: get all notification: http://localhost:7000/notification
+    - POST: create user: http://localhost:7000/v1/user
+    - POST: create group: http://localhost:7000/v1/group
+    - POST: add users to group: http://localhost:7000/v1/user-group
+    - POST: create notification: http://localhost:7000/v1/notification
+    - GET: get all notification: http://localhost:7000/v1/notification
 
