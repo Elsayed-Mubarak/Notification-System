@@ -5,9 +5,8 @@ const envs = {
   test: "test",
 };
 
-
 const currentEnv = process.env.NODE_ENV || envs.development;
-const config = require(`./env/${currentEnv}.js`);
+const config = require(`./env/${currentEnv}.ts`);
 
 config.envs = envs;
 config.currentEnv = currentEnv;

@@ -1,18 +1,26 @@
-# notification-system
-Notification system for sending Notifications (SMS/Email/Push Notification) to specifec user or group of users.
+# Notification-System
+Notification System For Sending Notifications (SMS/Email/Push_Notification) To Specifec User Or Group Of Users.
+By follwing Clean Architecture Using(Node.js) to write resilient software By implimenting Solid Prenciple And The Fit Design Pattern .
 
 technologies:
   - Node js
   - Express
   - Mongodb
-  - rRdis
-  - Kafka
-  - Jest
+  - Rdis
+  - Apache Kafka
   - Docker
   - Docker-compose
-  - Slack APIs
+  - Slack Hooks APIs
+  - Jest Unit Testing
 
-to start this project :
+Solid Prenciple:
+  - Open-Closed Prenciple
+  - Dependency Inversion
+
+Design Pattern:
+- Factory Design Pattern
+
+To Start This Project :
   - approach 1:
     - prerequisites:
       - install node     https://nodejs.org/en/download/
@@ -36,18 +44,18 @@ to start this project :
       - run docker-compose build
       - run docker-compose up
       
+      - now zookeeper-server should be running on port 2181
+      - now kafka-server1 should be running on port 9092
 
 Steps to Send a notification:
   - for specific user:
-    - create user: http://localhost:7000/api-docs/#/User/createUser
-    - create notification: http://localhost:7000/api-docs/#/Notification/createNotification  
+    - POST: create user: http://localhost:7000/v1/user
+    - POST: create notification: http://localhost:7000/notification
   
   - for group of users:
-    - create user: http://localhost:7000/api-docs/#/User/createUser
-    - create group: http://localhost:7000/api-docs/#/User/createGroup
-    - add users to group: http://localhost:7000/api-docs/#/User/addUsersToGroup
-    - create notification: http://localhost:7000/api-docs/#/Notification/createNotification
-
-DB SCHEMA
-  ![DB SCHEMA](https://user-images.githubusercontent.com/11231159/127750784-687e2e55-0a1e-4139-8c4d-4b6d065d8dce.png)
+    - POST: create user: http://localhost:7000/user
+    - POST: create group: http://localhost:7000/group
+    - POST: add users to group: http://localhost:7000/user-group
+    - POST: create notification: http://localhost:7000/notification
+    - GET: create notification: http://localhost:7000/notification
 

@@ -6,6 +6,17 @@
   "author": "Elsayed-Mubarak <elsayed.mubarak@gmail.com>",
   "license": "MIT",
   "private": false,
+  "jest": {
+    "transform": {
+      ".(ts|tsx)": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ]
+  },
   "scripts": {
     "start": "yarn serve",
     "dev": "ts-node src/server.ts",
@@ -18,6 +29,7 @@
   },
   "dependencies": {
     "@slack/webhook": "^6.0.0",
+    "@types/jest": "^27.0.3",
     "body-parser": "^1.19.0",
     "colors": "^1.4.0",
     "cors": "^2.8.5",
@@ -29,14 +41,26 @@
     "joi": "^17.4.2",
     "joi-objectid": "^4.0.2",
     "kafkajs": "^1.15.0",
+    "logger": "^0.0.1",
     "mongoose": "^6.0.3",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.12",
+    "redis": "^3.1.2",
     "swagger-ui-express": "^4.1.6",
     "ts-node": "^10.2.1",
-    "typescript": "^4.4.2"
+    "typescript": "^4.4.2",
+    "util": "^0.12.4",
+    "winston": "^3.3.3",
+    "winston-mongodb": "^5.0.7"
   },
   "devDependencies": {
-    "@types/mongoose": "^5.11.97"
+    "@types/mongoose": "^5.11.97",
+    "@types/supertest": "^2.0.11",
+    "@types/redis": "^2.8.32",
+    "connect-redis": "^6.0.0",
+
+    "jest": "^27.4.3",
+    "supertest": "^6.1.6",
+    "ts-jest": "^27.0.7"
   }
 }

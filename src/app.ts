@@ -1,17 +1,17 @@
-import Logger from './utils/logger'
-import mongoose from './config/mongoose'
+import Logger from './config/mongodb'
+import mongoose from './config/mongodb/mongoose'
 import express from 'express'
 import morgan from 'morgan'
-require("colors");
-Logger.dbConnection(mongoose);
-require("dotenv").config({ path: "./env/config.env" })
-const app = express();
-app.use(express.json());
-
 import notificationRouter from './routes/notificationRouter'
 import userRouter from './routes/userRouter'
-
+import "./services/cache";
+require("colors");
+Logger.dbConnection(mongoose);
+//require("dotenv").config({ path: "./env/config.env" })
+const app = express();
+app.use(express.json());
 app.use(morgan("tiny"))
+
 
 app.use('/v1', userRouter)
 app.use('/v1', notificationRouter)

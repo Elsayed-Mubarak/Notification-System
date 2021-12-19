@@ -1,6 +1,9 @@
-export default {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = {
     dbURI: "mongodb://127.0.0.1:27017/notification-system",
     ORIGIN_CORS: ["http://localhost:4200"],
     ticketValidationInDays: 365,
     RedisHost: "127.0.0.1",
-    REDIS_PORT:6379}
+    REDIS_PORT: 6379
+};
